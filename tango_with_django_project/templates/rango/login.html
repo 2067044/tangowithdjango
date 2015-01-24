@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Rango</title>
+</head>
+<body>
+    <h1>Login to Rango</h1>
+
+    <form id="login_form" method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+
+        <!-- Get login error messages if there are any -->
+        {% if messages %}
+            {% for message in messages%}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+        Username: <input type="text", name="username", value="" size="50"/>
+        <br/><br/>
+        Password: <input type="password" name="password", value="", size="50"/>
+        <br/>
+        <input type="submit" value="submit"/>
+
+        {%if lol %}
+        <h1>ahha</h1>
+        {% endif %}
+    </form>
+</body>
+</html>

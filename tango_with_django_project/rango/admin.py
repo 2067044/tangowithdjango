@@ -1,7 +1,8 @@
 from django.contrib import admin
-from rango.models import Category, Page
+from rango.models import Category, Page, UserProfile
 
 
+# Modifications for how the model will be displayed in the admin panel
 class PageAdmin(admin.ModelAdmin):
     list_display = ('title', 'category', 'url')
     list_filter = ['category']  # filter sidebar
@@ -14,3 +15,4 @@ class CategoryAdmin(admin.ModelAdmin):
 # This registers the models and makes them visible in the admin panel
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Page, PageAdmin)  # pass the class here so that the admin panel gets changed
+admin.site.register(UserProfile)

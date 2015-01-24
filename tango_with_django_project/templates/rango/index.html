@@ -11,7 +11,15 @@
     <!--<script src="{% static "js/jquery.js" %}"></script> -->
 </head>
 <body>
-    <h1>Rango says... hello world!</h1>
+    <!--<a href="{% url 'register' %}">Register Here</a> <br/>-->
+    <!--<a href="{% url 'login' %}">Login</a> <br/>-->
+
+    {% if user.is_authenticated %}
+        <h1>Rango says... hello {{ user.username }}!</h1>
+    {% else %}
+        <h1>Rango says... hello world!</h1>
+    {% endif %}
+
     <h2>Top Categories</h2>
     {% if categories %}
         <ul>
@@ -36,8 +44,19 @@
     {% endif %}
 
 
-    <a href="{% url 'add_category' %}">Add a new category</a> <br/>
-    <a href="/rango/about">About</a> <br/><br/>
+    {% if user.is_authenticated %}
+        <a href="/rango/restricted/">Restricted Page</a><br/>
+        <a href="/rango/logout/">Logout</a><br/>
+    {% else %}
+        <a href="/rango/register/">Register Here</a><br/>
+        <a href="/rango/login/">Login</a><br/>
+    {% endif %}
+
+
+    {% if user.is_authenticated %}
+    <a href="/rango/add_category/">Add a New Category</a><br/>
+    {% endif %}
+    <a href="/rango/about/">About</a><br/>
 
 </body>
 </html>

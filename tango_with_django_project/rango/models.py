@@ -1,5 +1,6 @@
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -27,3 +28,18 @@ class Page(models.Model):
 
     def __unicode__(self):
         return self.title
+
+
+class UserProfile(models.Model):
+    # Required to link a UserProfile to a User model (which comes with Django)
+    # One to One relation instead of inheritance -> better this way
+    user = models.OneToOneField(User)
+
+    # Additional attributes we wish to include
+    website = models.URLField(blank=True)
+    picture = models.ImageField(upload_to='profile_images', blank=True)
+
+    # Override unicode to return something useful
+    def __unicode__(self):
+        return self.user.username
+
