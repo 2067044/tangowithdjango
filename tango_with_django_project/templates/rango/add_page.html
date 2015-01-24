@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>Rango</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
+{% block title%} {% if cat %} {{ cat.name }} - New Page {% else %} No such category. {% endif %} {% endblock %}
 
+{% block body_block%}
     {% if cat %}
         <h1>Add page to <i>{{cat.name}}</i></h1>
         <form id="page_form" action="{% url 'add_page' cat.slug %}" method="post">
@@ -28,7 +24,5 @@
     {%else%}
         <h1>No such category exists.</h1>
     {% endif %}
+{% endblock %}
 
-
-</body>
-</html>
