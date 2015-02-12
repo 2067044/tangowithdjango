@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rango',
+    'registration',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -78,7 +79,8 @@ USE_L10N = True
 USE_TZ = True
 
 # --------------------------------------------------------------------------------------------------------------
-LOGIN_URL = '/rango/login/'  # redirect users here if some view has @login_required
+# After chapter 12 this is no longer needed
+LOGIN_URL = '/accounts/login/'  # The page users are redirected to if they are not logged in and trying to access auth p
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
@@ -98,6 +100,12 @@ TEMPLATE_DIRS = [TEMPLATE_PATH,
 # All uploads will be available through the media url
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #Absolute path to the media directory; i.e. where uploaded files are stored
+
+# Registration related variables
+REGISTRATION_OPEN = True        # Users can register if true
+ACCOUNT_ACTIVATION_DAYS = 7     # One week activation window
+REGISTRATION_AND_LOGIN = True   # Once a user registers, he will automatically be logged in
+LOGIN_REDIRECT_URL = '/rango/'  # The page users will arrive at after a successful login
 
 
 
