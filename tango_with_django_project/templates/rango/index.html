@@ -1,37 +1,58 @@
 {% extends 'base.html' %}
 
-    <!--<a href="{% url 'register' %}">Register Here</a> <br/>-->
-    <!--<a href="{% url 'login' %}">Login</a> <br/>-->
+{% load staticfiles %}
+
+{% block title %}Index{% endblock %}
 
 {% block body_block %}
-    {% if user.is_authenticated %}
-        <h1>Rango says... hello {{ user.username }}!</h1>
-    {% else %}
-        <h1>Rango says... hello world!</h1>
-    {% endif %}
+{% if user.is_authenticated %}
+<div class="page-header">
 
-    <h2>Top Categories</h2>
-    {% if categories %}
-        <ul>
-            {% for category in categories %}
-            <!-- Making use of Django's built in functions so that hardcoded URLs are avoided -->
-                <li><a href="{% url 'category' category.slug%}">{{ category.name }}</a></li>
-            {% endfor %}
-        </ul>
+    <h1 class="page-header">Rango says... hello {{ user.username }}!</h1>
     {% else %}
-        <strong>There are no categories present.</strong>
+    <h1 class="page-header">Rango says... hello world!</h1>
     {% endif %}
+</div>
 
-    <h2>Top Pages</h2>
-    {% if pages %}
-        <ul>
-            {% for page in pages %}
-                <li><a href="{{ page.url }}">{{ page.title }}</a></li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <strong>There are no pages at the moment.</strong>
-    {% endif %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Categories</h3>
+                </div>
+                {% if categories %}
+                <ul>
+                    {% for category in categories %}
+                    <li><a href="{% url 'category'  category.slug %}">{{ category.name }}</a></li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <strong>There are no categories present.</strong>
+                {% endif %}
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Pages</h3>
+                </div>
+                {% if pages %}
+                <ul>
+                    {% for page in pages %}
+                    <li><a href="{{page.url}}">{{ page.title }}</a> - {{page.category}} ({{page.category.views}}view(s))
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <strong>There are no categories present.</strong>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+</div>
 
 
 {% endblock %}

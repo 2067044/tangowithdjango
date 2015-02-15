@@ -5,8 +5,25 @@
 {% block title %} About {% endblock %}
 
 {% block body_block %}
-    <p>Website visits: {{ visits }}</p>
-    <h1>Rango says here is the about page</h1>
-    <h2>This tutorial has been put together by Kristian Sonev, 2067044</h2>
-    <img class="image-size" src="{% static 'images/me.jpg' %}" alt="Image of me"/>
+<div class="well">
+    <div class="page-header">
+        <h1>About</h1>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-3">
+            <img class="img-responsive" src="{% static 'images/me.jpg' %}" alt="Image of me"/>
+        </div>
+        <div class="col-md-9">
+            <p>Website visits: {{ visits }}</p>
+
+            <h2>Rango says here is the about page</h2>
+
+            <h3>This tutorial has been put together by Kristian Sonev, 2067044</h3>
+        </div>
+    </div>
+</div>
+
+
 {%endblock%}

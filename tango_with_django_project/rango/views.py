@@ -99,6 +99,8 @@ def category(request, category_name_slug):
         # Try to get a category with this slug and add
         # it to the context variable or throw an exception
         category_object = Category.objects.get(slug=category_name_slug)
+        category_object.views += 1
+        category_object.save()
         context_dict['category_name'] = category_object.name
 
         # Get all associated category pages
@@ -163,7 +165,6 @@ def add_page(request, category_name_slug):
         form = PageForm()
 
     context_dict = {'form': form, 'cat': cat}
-
     return render(request, 'rango/add_page.html', context_dict)
 
 
