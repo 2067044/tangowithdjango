@@ -10,6 +10,7 @@ urlpatterns = patterns('',
         # View a specific category
         url(r'^category/(?P<category_name_slug>[\w\-]+)/$', views.category, name='category'),
         url(r'^restricted/', views.restricted, name='restricted'),  # This URL can only be accessed if user is logged in
+        url(r'^search/', views.search, name='search'),
         )
 
 
