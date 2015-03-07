@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+<div class="container">
+    <div class="row">
+        {% for user in users %}
+
+            <div class="col-md-3">
+                {% if user.userprofile.picture %}
+                <img class="img-responsive" src="/media/{{user.userprofile.picture}}" alt="user picutre"/>
+                {% else %}
+                <!-- If no user picture display a default one -->
+                    <img class="img-responsive" src="/media/rango.jpg" alt="user picutre"/>
+                {% endif %}
+            </div>
+            <div class="col-md-5">
+                <h2>{{user.username}}</h2>
+                <p>Email: {{user.email}}</p>
+                <p>Website: <a href="{{user.userprofile.website}}">{{user.userprofile.website}}</a></p>
+
+
+            </div>
+
+        <!--Used just for clearing-->
+        <div class="row"></div>
+        <br/><br/><br/>
+        {% endfor%}
+    </div>
+
+</div>
+
+
+{% endblock %}

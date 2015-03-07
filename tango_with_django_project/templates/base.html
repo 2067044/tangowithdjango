@@ -40,9 +40,11 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="{% url 'index' %}">Home</a></li>
                 {% if user.is_authenticated %}
+                <li><a href="{% url 'profile' %}">Profile</a></li>
                 <li><a href="{% url 'restricted' %}">Restricted Page</a></li>
-                <li><a href="{% url 'auth_logout' %}?next=/rango/">Logout</a></li>
                 <li><a href="{% url 'add_category' %}">Add a New Category</a></li>
+                <li><a href="{% url 'password_change' %}">Change password</a></li>
+                <li><a href="{% url 'auth_logout' %}?next=/rango/">Logout</a></li>
                 {% else %}
                 <li><a href="{% url 'registration_register' %}">Register Here</a></li>
                 <li><a href="{% url 'auth_login' %}">Login</a></li>
@@ -52,6 +54,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-left">
                 <li><a href="{% url 'about' %}">About</a></li>
+                <li><a href="{% url 'browse_profiles' %}">Browse Profiles</a></li>
             </ul>
         </div>
     </div>
@@ -60,12 +63,13 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
-            
+            <!-- Sidebar here -->
             {% block side_block %}
-                {% get_category_list category%}
+                {% get_category_list category %}
             {% endblock %}
 
         </div>
+        <!-- Main content here -->
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <div>
                 {% block body_block %}{% endblock %}

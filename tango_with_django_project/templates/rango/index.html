@@ -24,7 +24,15 @@
                 {% if categories %}
                 <ul>
                     {% for category in categories %}
-                    <li><a href="{% url 'category'  category.slug %}">{{ category.name }}</a></li>
+                    <li>
+                        <a href="{% url 'category'  category.slug %}">{{ category.name }}</a>
+                        {% if category.views == 1 %}
+                            ({{category.views}} view)
+                        {% elif category.views > 1 %}
+                            ({{category.views}} views)
+                        {% endif %}
+
+                    </li>
                     {% endfor %}
                 </ul>
                 {% else %}
@@ -41,7 +49,12 @@
                 {% if pages %}
                 <ul>
                     {% for page in pages %}
-                    <li><a href="{{page.url}}">{{ page.title }}</a> - {{page.category}} ({{page.category.views}}view(s))
+                    <li><a href="{% url 'goto' %}?page_id={{page.id}}">{{ page.title }}</a> - {{page.category}}
+                        {% if page.views == 1 %}
+                            ({{page.views}} view)
+                        {% elif page.views > 1 %}
+                            ({{page.views}} views)
+                        {% endif %}
                     </li>
                     {% endfor %}
                 </ul>

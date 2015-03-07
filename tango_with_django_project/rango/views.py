@@ -1,14 +1,17 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
 from rango.models import Category
 from rango.models import Page
 from rango.forms import CategoryForm, PageForm
-from rango.forms import UserForm, UserProfileForm
+from rango.forms import UserForm, UserProfileForm, EditUserForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from datetime import datetime
+from models import UserProfile
 from bing_search import run_query
+from django.contrib.auth.models import User
 
 
 def index(request):
@@ -96,6 +99,22 @@ def about(request):
 def category(request, category_name_slug):
     context_dict = {}
 
+    # Used for return results
+    context_dict['result_list'] = None
+    context_dict['query'] = None
+
+    # strip() removes any html tags
+    #
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+
+        if query:
+            # Running a Bing search to get the results list
+            result_list = run_query(query)
+
+            context_dict['result_list'] = result_list
+            context_dict['query'] = query
+
     try:
         # Try to get a category with this slug and add
         # it to the context variable or throw an exception
@@ -105,7 +124,7 @@ def category(request, category_name_slug):
         context_dict['category_name'] = category_object.name
 
         # Get all associated category pages
-        pages = Page.objects.filter(category=category_object)
+        pages = Page.objects.filter(category=category_object).order_by("-views")
         context_dict['pages'] = pages
 
         # Used in the tempalte to verify that the category exists
@@ -186,6 +205,84 @@ def search(request):
             result_list = run_query(query)
 
     return render(request, 'rango/search.html', {'result_list': result_list})
+
+
+def track_url(request):
+    '''
+    This method tracks how many times a page has been visited.
+    :param request: incoming request data
+    :return:
+    '''
+
+    url = '/rango/'
+    # If we have a get and there is a page id in the
+    # get request, try updating the page views
+    if request.method == 'GET':
+        if 'page_id' in request.GET:
+            page_id = request.GET['page_id']
+            try:
+                page = Page.objects.get(id=page_id)
+                page.views += 1
+                page.save()
+                url = page.url
+            except:
+                pass
+
+    return redirect(url)
+
+@login_required
+def register_profile(request):
+    if request.method == 'POST':
+        profile_form = UserProfileForm(data=request.POST)
+
+        if profile_form.is_valid():
+            profile = profile_form.save(commit=False)
+            profile.user = request.user
+
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['picture']
+
+            profile.save()
+            return redirect("/rango/")
+        else:
+            print profile_form.errors
+    else:
+        profile_form = UserProfileForm()
+    return render(request, "rango/ProfileRegistration.html", {'profile_form': profile_form})
+
+@login_required
+def edit_profile(request):
+    context_dict = {}
+
+    if request.method == 'POST':
+        user_form = EditUserForm(data=request.POST, instance=request.user)
+        profile_form = UserProfileForm(data=request.POST, instance=request.user.userprofile)
+
+        if profile_form.is_valid and user_form.is_valid:
+            profile = profile_form.save(commit=False)
+            user = user_form.save(commit=False)
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['picture']
+
+            user.save()
+            profile.save()
+        else:
+            print user_form.errors
+            print profile_form.errors
+    else:
+        user_form = EditUserForm(instance=request.user)
+        profile_form = UserProfileForm(instance=request.user.userprofile)
+
+    context_dict['user_form'] = user_form
+    context_dict['profile_form'] = profile_form
+    context_dict['picture'] = request.user.userprofile.picture
+    return render(request, "rango/profile.html", context_dict)
+
+
+@login_required
+def browse_profiles(request):
+    all_users = User.objects.all()
+    return render(request, 'rango/browse_profiles.html', {'users': all_users})
 
 
 
