@@ -60,6 +60,17 @@
         {% if user.is_authenticated %}
             <a href="{% url 'add_page' category_slug %}">Add a new page</a>
         {% endif %}
+
+        <p>
+            <strong id="like_count">{{ category.likes }}</strong> people like this category
+
+            {% if user.is_authenticated %}
+                <button id="likes" data-catid="{{category.id}}" class="btn btn-primary" type="button">
+                <span class="glyphicon glyphicon-thumbs-up"></span>
+                    Like
+                </button>
+            {% endif %}
+        </p>
      <!-- Allow new pages to be added only if category exists -->
     {% else %}
         <h2>The specified category <strong>{{ category_name }}</strong> does not exist.</h2>

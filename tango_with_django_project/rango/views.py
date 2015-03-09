@@ -12,6 +12,7 @@ from datetime import datetime
 from models import UserProfile
 from bing_search import run_query
 from django.contrib.auth.models import User
+import json
 
 
 def index(request):
@@ -283,6 +284,55 @@ def edit_profile(request):
 def browse_profiles(request):
     all_users = User.objects.all()
     return render(request, 'rango/browse_profiles.html', {'users': all_users})
+
+
+@login_required
+def like_category(request):
+    cat_id = None
+    if request.method == 'GET':
+        cat_id = request.GET['category_id']
+
+    likes = 0
+    if cat_id:
+        cat = Category.objects.get(id=int(cat_id))
+        if cat:
+            likes = cat.likes + 1
+            cat.likes = likes
+            cat.save()
+
+    return HttpResponse(likes)
+
+
+# Helper function for getting categories starting with a particular string
+def get_category_list(max_results=0, starts_with=''):
+        cat_list = []
+        if starts_with:
+                cat_list = Category.objects.filter(name__istartswith=starts_with)
+
+        if max_results > 0:
+                if len(cat_list) > max_results:
+                        cat_list = cat_list[:max_results]
+
+        return cat_list
+
+
+# View responsible for dynamically suggesting categories to users
+def suggest_category(request):
+        cat_list = []
+        starts_with = ''
+
+        # Pull the data from an ajax script
+        if request.method == 'GET':
+                starts_with = request.GET['suggestion']
+
+        cat_list = get_category_list(8, starts_with)
+        response = {}
+        results = []
+        for k in cat_list:
+            results.append({'name': k.name, 'url': "/rango/category/" + k.slug})
+        response['data'] = results
+
+        return HttpResponse(json.dumps(results), content_type="application/json")
 
 
 

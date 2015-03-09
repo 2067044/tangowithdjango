@@ -74,7 +74,7 @@ def populate():
     # My category
     my_cat = add_cat(name="Kristian Sonev | 2067044", views=0, likes=0)
     add_page(my_cat, title="Github", url="https://github.com/2067044", views=page_view_dict[5])
-    add_page(my_cat, title="PythonAnywhere", url="http://2067044.pythonanywhere.com", views=page_view_dict[5])
+    add_page(my_cat, title="PythonAnywhere", url="http://2067044.pythonanywhere.com/rango", views=page_view_dict[5])
 
     # Give the user feedback on what we have added
     for cat in Category.objects.all():
